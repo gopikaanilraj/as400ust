@@ -1,0 +1,43 @@
+RPGLE PROGRAMMING
+-----------------
+
+Source type --> RPGLE
+src phy file --> QRPGLESRC
+CRTSRCPF QRPGLESRC
+
+Specifications used :
+H-->control spec (controls the way hoe prog is created and how it behaves) eg: DATFMT(*MDY)
+F-->file spec (file declaration -- needs to be declared before use)
+O-->output spec (defines structure of the output[like reports])
+P-->procedure spec (procedure declaration )
+D-->definition spec (any vars, ds etc that needs to be used declared here)
+C-->calculation spec (all the operations coded here)
+
+7TH position * --> comment line
+Indicator variables --> 0 and 1 
+In Rpgle last record indicator --> to inform the end of the prgm  *INLR = '1'
+Compilation :
+Run --> CALL <PGMNAME>
+
+FILE OPERATIONS
+---------------
+
+To declare files --> F spec F4 --> filename(needs to be present inside the lib) -->filetype F1 (I readmode, O writemode, U read&update mode, C combined type-input+output) --> file designation(if output only file give blank)__almost all types given F[procedural file]--> file addition (A__can write)-->file format(majority E)--> record address (k__seq will be order of key, blank__arrival order)
+device-->
+screens in as400-->workstations
+files --> disk
+
+To read -- > operation code--READ, factor2 --filename
+do while opcode --> DOW    NOT %EOF()    ENDDO
+do until --> DOU
+for --> FOR
+
+To set a pointer towards a specific record --> SETLL set lower limit
+ --> SETGT set greater limit
+
+Reverse --> READP(read prev) + SETGT
+READE-->read eql
+READPE--> read previous equal
+*loval SETLL
+*hival SETGT
+reverse order also NOT %EOF()
