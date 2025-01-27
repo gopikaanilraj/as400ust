@@ -1,0 +1,106 @@
+21-01-2025
+********************************************************
+SQLRPGLE
+--------
+
+Program type --> sqlrpgle
+Each sql query executed between :
+ c/exec sql 
+ c/end-exec 
+and each qry given after 'c+'
+
+Fixed format example:                     
+c/exec sql                        
+c+ Update emppf set empcity = ' ' 
+c/end-exec     
+
+Free format example:
+   exec sql                          
+      Update emppf set empcity = ' '; 
+
+Should always set commit to *none inside the pgm  
+
+To read record by record use cursor
+Steps: (sequential cursor)
+
+1.Declare cursor
+c/exec sql
+c+ declare c1 cursor for select * from emppf
+c/end-exec
+
+2.Open cursor
+c/exec sql
+c+ open c1
+c/end-exec
+  
+3.In loop fetch record by record from cursor into variables/ ds
+dow  sqlcode<> 100
+
+c/exec sql
+c+ fetch c1 into :fld1,:fld2
+OR
+c+ fetch c1 into :data str
+c/end-exec  
+
+if sqlcode = 100
+leave
+//processing
+enddo
+
+4. close cursor
+
+Command to initialize ds -- clear
+
+RCLACTGRP
+Default activation group is something that 
+COMMENTS FROM 8TH POSITION IN FREE FORMAT //
+
+
+RTNCSRLOC(&rcd &fld &pos) --return cursor locn
+Instead of hardcoding headings of field into ctl part give output fields and populate before exformating
+
+
+Write dynamic query only if there are some things in the query that is inconsistent
+if only values are changing - host variables
+if filenames or clause is changing - dynamic query
+
+screen 1 
+--------
+filter 1
+filter 2
+filter 3
+-----can be entered in any combination -- dynamic query
+
+update screen
+------------
+empno
+name
+city
+age
+
+here empno fixed, so use host variables since empno consistent
+
+
+insert into billdtltb1 
+select 'BL_'||char(orderno),itemno,
+(dynamic allathene || kodth concatenate cheyyan patollu
+else use +)
+PRINTING REPORT DETAIL,WRITING INTO SUBFILES--NEED CURSOR
+In rpgle strings are concatenated using +
+
+
+
+PREPARE S1 FOR :SQLSTRING
+EXECUTE S1
+ OR
+IMMEDIATE EXECUTE :SQLSTRING
+
+
+crtjrnrcv -create journal receiver
+wrkobj - type-*jrn or *jrnrcv
+
+EXEC SQL GET DIAGNOSTICS CONDITION 1
+
+
+
+               
