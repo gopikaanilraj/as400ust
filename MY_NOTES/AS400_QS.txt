@@ -1,0 +1,109 @@
+1.  AS400 was a result of what?
+2.  When was it created?
+3.  System archi? DB used?
+4.  Utilities?
+5.  Client access softwares?
+6.  ASP?
+7.  What is an as400 library? Root library?
+8.  What are the types of libraries?
+9.  Library type?
+10. A max of how many libs can be defined for a job?
+11. A max of how many libs can be defined in a lib list?
+12. Source phy file?
+13. Command to create source phy file?
+14. Standard record length for srcpf?
+15. Additional parameters?
+16. What is a job in as400?
+17. Types of jobs?
+18. What is a job name composed of?
+19. Flow of a batch job?
+20. Define : job priority
+21. output q?
+22. Run priority?
+23. Concatenating strings in as400?
+24. CL logical exp?
+25. GOTO command?
+26. DO-ENDDO ELSE-IF?
+27. CALL command?
+28. ENDPGM & RETURN
+29. QCMDEXC api?
+30. Commands for subroutines in CL?
+31. CL400 difference between Copy File and CRTDUPOBJ command?
+32. Types of monmsgs?
+33. CPF0000 vs CPF9999
+34. Data areas ? How to define? Op codes related to data areas?
+35. Local and group data area?
+36. A phy file is composed of?
+37. Entry levels in phy file and keywords?
+38. Logical file?
+39. Types of LF?
+40. Journaling steps
+41. Tables in DDL/SQL?
+42. Difference bw index and view?
+43. Different types of sql joins?
+44. CL vs RPGLE 
+          - Start of pgm
+          - File declaration
+          - Variable def
+          - Operations
+          - End of pgm
+          - Parameters
+          - Error handling
+          - Concat strings
+45. Source file and file type of CL?
+46. Debugging in CLP?
+47. Debugging in RPGLE?
+48. Debugging in ILE?
+49. IF ELSE in rpgle vs clp
+50. CL is what kind of model?
+51. Usage of GOTO label?
+52. How to read and write records in CLP?
+53. Loops in CLP?
+54. How to clear msg history in clp?
+55. What is an array in as400?How to define?
+56. Types of array in as400 and how to eneter each one?
+57. Array indexing and initialisation?
+58. Searching, sorting and summation in array?
+59. Data structure in as400 and how to define it?
+60. Types od DS?
+61. Subfile and basic parameters?
+62. Maximum number of records that can be loaded into a subfile?
+63. Subfile record formats?
+64. Types of subfiles?
+65. Subfile steps?
+66. Indicators for subfile?
+67. Override scope parameter in cl?
+68. Various specs in RPGLE?
+69. How to rename the rcdfmt of any file?
+70. What do you mean by an activation group in ILE?
+71. How to define a procedure in ILE?
+72. Types of procedure calls?
+73. Steps to create an internally described and externally described report?
+74. SQL message diagnostics?
+75. Types of cursors?
+76. How to check error codes using SQLCODE?
+77. Types of queries in sql?
+78. How to perform order by on subfile field names?
+79. Scrollable cursors?
+80. Reading opcodes in RPGLE?
+81. Difference between return and INLR?
+82. NODEBUGIO and SRCSTMT in H spec?
+83. Dynamic select in LF?
+84. Datatypes in as400?
+85. RPG III specs?
+86. Correct sequence of sql clause?
+87. Steps to create service pgm?
+88. ADD and MOVE opcodes in RPG III?
+89. CAS and CAB?
+90. Loops in RPG III?
+91. Opcode to parse XML files?
+92. How to parse XML from IFS?
+93. Namespace?
+94. Options in XML?
+95. ifs_read and write?
+96. 
+
+
+
+
+

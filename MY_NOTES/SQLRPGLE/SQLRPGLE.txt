@@ -1,0 +1,254 @@
+21-01-2025
+********************************************************
+SQLRPGLE
+--------
+
+Program type --> sqlrpgle
+Each sql query executed between :
+ c/exec sql 
+ c/end-exec 
+and each qry given after 'c+'
+
+Fixed format example:                     
+c/exec sql                        
+c+ Update emppf set empcity = ' ' 
+c/end-exec     
+
+Free format example:
+   exec sql                          
+      Update emppf set empcity = ' '; 
+
+Should always set commit to *none inside the pgm  
+
+To read record by record use cursor
+Steps: (sequential cursor)
+
+1.Declare cursor
+c/exec sql
+c+ declare c1 cursor for select * from emppf
+c/end-exec
+
+2.Open cursor
+c/exec sql
+c+ open c1
+c/end-exec
+  
+3.In loop fetch record by record from cursor into variables/ ds
+dow  sqlcode<> 100
+
+c/exec sql
+c+ fetch c1 into :fld1,:fld2
+OR
+c+ fetch c1 into :data str
+c/end-exec  
+
+if sqlcode = 100
+leave
+//processing
+enddo
+
+4. close cursor
+
+Command to initialize ds -- clear
+
+RCLACTGRP
+Default activation group is something that 
+COMMENTS FROM 8TH POSITION IN FREE FORMAT //
+
+
+RTNCSRLOC(&rcd &fld &pos) --return cursor locn
+Instead of hardcoding headings of field into ctl part give output fields and populate before exformating
+
+
+Write dynamic query only if there are some things in the query that is inconsistent
+if only values are changing - host variables
+if filenames or clause is changing - dynamic query
+
+screen 1 
+--------
+filter 1
+filter 2
+filter 3
+-----can be entered in any combination -- dynamic query
+
+update screen
+------------
+empno
+name
+city
+age
+
+here empno fixed, so use host variables since empno consistent
+
+
+insert into billdtltb1 
+select 'BL_'||char(orderno),itemno,
+(dynamic allathene || kodth concatenate cheyyan patollu
+else use +)
+PRINTING REPORT DETAIL,WRITING INTO SUBFILES--NEED CURSOR
+In rpgle strings are concatenated using +
+
+
+
+PREPARE S1 FOR :SQLSTRING
+EXECUTE S1
+ OR
+IMMEDIATE EXECUTE :SQLSTRING
+
+
+crtjrnrcv -create journal receiver
+wrkobj - type-*jrn or *jrnrcv
+
+EXEC SQL GET DIAGNOSTICS CONDITION 1
+
+if single row always select into
+if multiple rows fetch into
+
+Correct sequence of clauses:
+SELECT
+FROM
+JOIN-ON
+WHERE-EXISTS-NOT EXISTS
+AND-ALL-LIKE
+GROUP BY
+HAVING
+ORDER BY
+
+Example:
+SELECT column1, column2
+FROM table_name
+WHERE condition
+GROUP BY column1
+HAVING condition
+ORDER BY column2;
+
+SELECT table_name.column1, another_table.column2
+FROM table_name
+INNER JOIN another_table ON table_name.common_column = another_table.common_column
+WHERE table_name.column3 = 'some_value'
+  AND table_name.column1 LIKE 'pattern%'
+  AND table_name.column2 > ALL (SELECT column2 FROM another_table WHERE condition)
+GROUP BY table_name.column1
+HAVING COUNT(table_name.column1) > 1
+ORDER BY another_table.column2 DESC;
+
+
+
+To compare with specific pattern:
+SELECT column1, column2
+FROM table_name
+WHERE column1 LIKE 'pattern%';
+In this example, the % is a wildcard that matches zero or more characters. You can also use _ to match a single character.
+
+To compare a value to all values in another query result:
+SELECT column1, column2
+FROM table_name
+WHERE column1 > ALL (SELECT column1 FROM another_table WHERE condition);
+
+Combined:
+SELECT column1, column2
+FROM table_name
+WHERE column1 LIKE 'pattern%' AND column2 > ALL (SELECT column2 FROM another_table WHERE condition);
+This query selects rows where column1 matches a specific pattern and column2 is greater than all values returned by the subquery.
+
+If commitement control is *chg the prgm should be journaled.
+
+GROUPBY--ORDERBY--SUBFILE--REPORT--DYNAMIC_QUERY
+
+Commit *none mns it will be committed to ur db
+
+Inside EXTNAME filename should be in ' '(quotes)
+
+wrkobjlck
+
+Insensitive scroll cursor--cursor will not reflect any changes
+
+By default scroll-cursor will sensitive-when using cursor if any changes happen it will be reflected
+within sensitive also - 2 types---sensitive static scroll cursor --reflect only updates and deletes not inserts,
+DYNAMIC -- SHOWS EVERYTHING
+
+How to do exam question with flatfiles?
+CL ILE Q?
+To fetch group of rows at once-- fetch into array data str
+
+fetch c1 for :n rows into :empds
+n--> no. of rows
+advantage - faster -those many less times into ur db
+
+looping into array/ds is more efficient than looping into table
+
+In case of date files -- in sqlrpgle -- tables defined with iso datfmt , pgm compiles with job datefmt
+To fix this, while compiling in 3rd pg or smth 
+give date format as*ISO--also give seperator
+give inside prgm(better)
+set option datfmt = *ISO, timfmt = *ISO, commit = *NONE;
+
+bind by copy - crtbndrpg
+bind by reference - service pgms - crtsrvpgm
+signature -- will be created based on export procedures
+updsrvpgm
+QSRVSRC--
+Inn all procedures
+STRPGMEXP
+ENDPGMEXP
+
+dspsrvpgm
+1.Create modules required for your service pgm.
+
+2.Create binder source with all export details
+strpgm pgmlvl(*current)
+export("proc1")
+
+3.create service pgm
+4. bind this service pgm by adding to bind directory
+
+To search a string in all the files of a particular source file:
+type 25 in any one file + shift f1(repeats in all files)
+enter the string in find string pdm
+FNDSTRPDM
+ENTER to goto next member where that string is found
+
+To get extra lines in command line --> call qcmd
+
+Object type for jobq --> *JOBQ
+Output q --> *OUTQ
+Subsystem --> *SYS
+
+COPYFILE (CPYF+F4)
+In copyfile destination file should always be a physical file--if not found then sys creates a pf
+
+If source file has more fields than dest file give additional parameter formatoption *drop(will drop extra fields from source)
+If destination fields has more fields use *map(maps extra fields with default values)
+try to keep the fields zoned(if packed the copy will be messed up)
+
+
+Binding directory --> CRTBNDDIR
+ILE pgm details --> DSPPGM <pgmname>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               
