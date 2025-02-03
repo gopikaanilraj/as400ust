@@ -1,0 +1,42 @@
+08-01-2025
+***********************************************************************************************************
+
+JOB --JOBQ--RUNTIME--SUBSYS--OUTQ
+OUTQ attached to a device description(printer)
+
+RLU(report layout utility)
+
+STRRLU --strt rlu
+F4
+Source file -- QDDSSRC
+give member name thats all
+
+DESIGN REPORT POPUP
+
+DR command to define records(record lvl keywords)--f18--rename
+VF (view fields) -- f11(define fields) -to change --field keywords -- f10 -- change
+Again DR
+
+PAGE - default name -- to auto populate with page
+
+to align ..place cursor.. f13 mark data...place cursor at dest position - f15 move marked data
+
+compilation 14 CRTPRTF
+type - *file
+
+type 19 to open rlu files
+
+To delete entire record format -- D
+To change length -- reduce or add dots(.) enter
+
+bIND RPG COMPILATION CRTBNDRPG
+
+overflow indicator ---auto switched on when pg is completed-- keyword OFLIND(*99)
+
+SPACEA(3)
+add 3 blank lines after
+SPACEB(3)
+add 3 blank lines before
+
+SKIPA
+SKIPB 

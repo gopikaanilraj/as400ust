@@ -1,0 +1,9 @@
+1. Physical file creation - unique, K, R (CRTPF)
+
+2. Logical file - PFILE, S, O, CMP, FIFO, LIFO, FCFO, JDFLTVAL, J, JFILE, JOIN, JFLD, JREF (CRTLF)
+
+3. SQL - CREATE OR REPLACE TABLE(not null with default, primary key), CREATE VIEW...AS..[CAST,ROUND], CURRENT DATE TIME, INDEX(create unique index indexname on tablename(key1,key2)), DROP(equivalent to dltf or wrkobj filename 4), Alter table(equivalent in dds -- chgpf), flatfiles(files without str), DELETE FROM(equivalent to clrpfm clear phy member
+
+4. RPGLE - 
+
+5. DSPF (CRTDSPF)

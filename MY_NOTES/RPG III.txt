@@ -1,0 +1,31 @@
+RPG III
+-------
+
+No D spec
+
+H
+F
+E 
+
+C
+O
+
+No eval operation -- if u wnt to add -- add opcode
+Z-ADD -- initialize fields
+
+Z-ADD2   A   100 
+first clrs out A and then assign 2 to A
+
+For characters :
+MOVEL -- Move from left
+MOVE -- move from right
+
+Debugging - like clp
+
+Read - EQ indicator-eql indicator
+Chain - HI(high)
+Not DO -- its DOWEQ
+ Instead of UPDATE we have UPDAT
+
+CAS --  compare and execute subroutine
+CAB -- compare and branch

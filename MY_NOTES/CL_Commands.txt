@@ -1,0 +1,53 @@
+OVRDBF
+OPNQRYF
+CPYFRMQRY
+SBMJOB
+CPYTOIMPF
+CPYFRMIMPF
+
+CVTDAT
+
+CRTDIR
+WRKLNK<dirname>
+
+
+Message types :
+SNDMSG
+RCVMSG
+SNDUSRMSG *inq(for reply), *info(for jzt info)
+SNDPGMMSG
+SNDBRKMSG
+
+To clear display history :
+CLRMSGQ <qname-wing15>
+
+Data area:
+CRTDTAARA
+CHGDTAARA
+DSPDTAARA
+RTVDTAARA
+
+File members:
+ADDPFM
+DSPPFM
+
+Wrkjobq jobqueuename : List of jobs in job queue
+wrkjobq qbatch  :This is to check jobs in qbatch job queue
+wrkactjob : this will give list of all active jobs
+wrkactjob sbs(subsystem name) : this will give active jobs only for that subsystem.
+DSPPGMREF (PGMNAME) THIS WILL give reference in a program
+DSPJOBLOG
+for batch - same or WRKJOB <jobname>
+
+Source file  has more fields
+CPYF FROMFILE(DEPTPF) TOFILE(DEPTPF1) MBROPT(*REPLACE) CRTFILE(*YES) FMTOPT(*DROP)  
+
+Destination file  has more fields
+CPYF FROMFILE(DEPTPF) TOFILE(DEPTPF1) MBROPT(*REPLACE) CRTFILE(*YES) FMTOPT(*MAP)  
+
+COPY file with both map and drop , system will take care based on file fields.
+CPYF FROMFILE(DEPTPF) TOFILE(DEPTPF1) MBROPT(*REPLACE) CRTFILE(*YES)
+ FMTO PT(*MAP *DROP)                                                            
+
+different str
+CPYF FROMFILE(DEPTFLAT) TOFILE(DEPTPF1) MBROPT(*REPLACE) FMTOPT(*NOCHK)

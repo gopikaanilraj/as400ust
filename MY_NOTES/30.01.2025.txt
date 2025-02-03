@@ -1,0 +1,31 @@
+Fetch details from XML to rpgle array ds
+Parse xml,json etc and use them in pgm--DATA INTO opcode--external parser YAJL library
+
+
+To log off in from user profile --- in menu commands give SIGNOFF command
+For report, to show in an interactive way cpy the report to some flatfile and do runqry on that.(CPYSPLF command--give jobname[*means current job])
+in CL, call the report rpgle program, cpysplf into flatfile and then runqry
+
+varying
+total number of elements in an xml cod -- 372
+
+dcl-ds pgmds psds;
+count int(20) pos(372);
+end-ds;
+
+template keyword - to refer structure for a ds
+
+XML namespace
+  <ns:orderinfo>
+Option --> ns=remove(remove namespace and then parse) or ns=merge(merge ns_<name>) 
+countprefix
+data into tag
+
+header--path(option)
+
+json --> data into
+www.pub400.com
+ifs_read
+ifs_write
+ifs_write_binary
+CCSID --37 
