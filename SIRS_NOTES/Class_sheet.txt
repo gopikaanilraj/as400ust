@@ -1,0 +1,489 @@
+1.    CRTLIB LIB(PRAFULLIB)
+
+2.    CRTSRCPF FILE(PRAFULLIB/QDDSSRC)
+
+3. WRKMBRPDM (Navigate to source physical file)
+WRKMBRPDM FILE(PRAFULLIB/QDDSSRC)   
+
+4. Add a source member
+   F6 - Create
+  Provide name , source type(PF/LF/RPGLE/CLP..)  and press enter.
+
+
+5. Physical file entries
+    a.	File level
+            Not mandatory , 
+            Only functions will be present.    
+    b.  Record level
+            Type : R , Record name and functions if required
+             Mandatory entry
+    c.  Field level
+         Field names and attributes
+    d.  key level 
+              Type : K and field name to be assigned as key
+
+6. Once source member is created compile that source to create as400 object
+Option : 14
+
+By default compile option will be set as batch ,Change that to N by using function key F18(Change defaults)
+
+7. Logical files
+   file level
+   record level  pfile(pf name)
+   field level  (In case we need fewer number of fields)
+   key level
+   select/omit level S or O
+
+8. Command to change current library  : 
+CHGCURLIB CURLIB(PRAFULLIB)
+
+9. Command to enter data from command line
+
+upddta filename
+
+10. runqry *n filename
+
+11. wrksplf to check all spool files created by interactive job
+
+12.to check compilation issues
+     a. Check spool files command :wrksplf
+     b. Navigate to last spool file which has same name as source member
+     c. 5 to display
+     d. In control type B
+     E. fIND iD , again navigate to top and search.
+
+13. DLTSPLF *Select
+
+14.DSPFFD  : Display file field description
+   dspfd   : display file description
+
+15. wrkobj generic name
+   wrkobj EMPLF*    , IT WILL display all objects starting with EMPLF
+   WRKOBJ LIB/*ALL  IT WILL DISPLAY ALL OBJECTS IN PARTICULAR LIBRARY.
+
+16. DISPLAY details in library
+   DSPLIB PRAFULLIB 
+17. dspdbr filename
+ display data base relations
+ This will give all dependent logicals on a physical file.
+
+18. Select or Omit in logical file.
+
+    This entry will come after Key level entries
+    Name type will be 'S' or 'O'
+    field name will be filter field
+    In functions we will use functions like CMP , COMP ,LIST,Values
+
+OR CONDITION.
+
+       S EMPCITY    CMP(EQ 'HYD')
+       S EMPAGE     CMP(GT 25)
+
+AND CONDITION.
+
+       S EMPCITY    CMP(EQ 'HYD')
+         EMPAGE     CMP(GT 25)
+
+SELECT AND OMIT
+
+       S EMPCITY    CMP(EQ 'HYD')
+         EMPAGE     CMP(LE 25)
+
+19. SEU by default allows character/source entry only in upper case.
+     F13 - Change session defaults
+    make 'N' in upper case input only column.
+
+
+20. Data types in dds
+    A  : Character
+    P : Packed decimal  (2 digits occupy 1 byte) 5 or 6 bytes
+    S : zoned decimal   (1 digit occupy 1 byte) 10 bytes
+    L : Date 
+    t : Time
+    z : timestamp
+
+21 keywords/functions
+   
+file level  : UNIQUE , FIFO/LIFO/FCFO , DYNSLT , JDFTVAL
+Record LEVEL  : PFILE , JFILE, TEXT
+FIELD LEVEL  :   JREF (Join lf)  , comp/cmp/values , colhdg
+key level    :  descend , ABSVAL
+
+
+ RPG
+---------------------------
+
+Source type  : RPGLE
+
+H - Control spec DATFMT(*MDY)
+
+F  - FILE SPEC  (FILE DECLARATION)
+D  - DEFINITION SPEC (VARIABLE /DATA STRUCTURES/ARRAYS.. DECLARATION)
+C  - CALCULATION SPEC(ALL OPERATIONS WILL BE CODED IN C SPEC)
+P  - PROCEDURE SPECIFICATION
+O  - OUTPUT SPEC
+
+
+----------------------------------------------------------------------------------
+EVAL Operation code : - 
+
+ In operation code  mention EVAL and factor 2 mention operation
+     eval          a =   2
+     eval          c =  a+ b
+-------------------------------------------------------------
+
+comment will start with  *
+------------------------------------------------------
+
+end of code  : either swich on last record indicator LR or use operation code return
+      
+eval *inlr = '1'
+
+or
+
+
+return  
+
+
+------------------------------------------------
+Parameter list  :
+
+   Plist is operation code used to define parameter list.
+   Factor 1 will contain parameter list name.
+      
+If that parameter list name is *ENTRY then it refers program entry parameter
+
+Plist will be followed by PARM operation code.
+ In PARM operation code we will mention parameter variable
+
+
+------------------------------------------------------------------------
+Conditional  :
+
+1.	
+Operation code will be IF 
+and condition will be placed in extended factor 2
+
+if condition true
+    execute code
+    execute code
+    
+
+else
+     exec code
+      exec code
+
+endif
+
+
+2.
+      IF  CONDN1
+          EXECUTE
+      ELSEIF CONDN2 
+          EXECUTE
+      ELSEIF CONDN3      
+          EXECUTE
+       ELSE
+          EXECUTE
+      ENDIF  
+    
+
+3
+ 
+      SELECT
+
+      WHEN  CONDN1
+          EXECUTE
+      WHEN CONDN2 
+          EXECUTE
+      WHEN CONDN3      
+          EXECUTE
+      OTHER
+          EXECUTE
+      ENDSL
+-------------------------------------------------------------------------
+Conversion built in functions :
+
+1.	%CHAR(NUMBER/DATE/TIME OPERATION WHICH NEEDS TO BE CONVERTED)
+2.	%dec(varname:5:2)
+3       %date(var name)
+        a is date variable
+            a=  %date() 
+if %date() is used without any conversion variable it returns current date in above case a will contain current date.
+---------------------------------------------------
+
+
+File operations :
+
+
+
+F-Spec
+------------
+
+   1. File name : Name of file
+   2. file type  
+     I : Input
+     o : Output
+     U :Update
+     c : Combined
+  3. file designation  : F (Fully procedural file)
+  4. file addition will be  A if we need to add records 
+         This will come along with file type I/U
+  5. file format will be 'E' (Externally described files)
+  6. Record address type : K (IF WE NEED to access records based on key sequence)
+  7 . DEvice  
+       Disk for data base
+       workstn for screen
+       printer for reports
+
+--------------------------------
+
+debugging steps
+--------------------
+1 .while compiling take 14 and F4 and then F10 for additional parameters
+      compiler options : *NODEBUGIO
+      DEBUGGING VIEWS : *SOURCE
+
+2. STRDBG  pgm name and updprod *YES 
+
+   F6  : To add breakpoint from where we need execution to beging in debug mode.
+   F12 : Resume
+
+3. Call program
+  control will stop at line where breakpoint is added.
+
+4. Displaying value of variable in debug.  
+Place a cursor at variable and use function key  F11 to display values of that variable
+   
+  or 
+we can use ev variable name to display
+
+5. F10 to step into next line
+
+6. F6 to remove breakpoint
+
+7 . Once debug is done ENDDBG
+-
+--------------------------------------
+H-SPEC keywords example
+
+H OPTION(*NODEBUGIO:*SRCSTMT:*NOUNREF)
+hDATFMT(
+
+
+
+*NODEBUGIO: If this is not given when we start debug (STRDBG) break points are generated for each field in the file.  By using *NODEBUGIO no break points are generated for the fields, so with one press of the F10 key we advance to the next statement.
+
+*SRCSTMT: The source statement line numbers are used for the line numbers in the generated program or module. Therefore, when we receive an error message about line  example 100.00 we can go straight to that line number in the source. 
+
+*NOUNREF: The unreferenced fields and variables are not generated, unless they are used by some other module. On the plus side: this makes your program smaller. On the minus side: the unreferenced fields cannot be used in debug.
+
+ALWNULL(*USRCTL): At times we  have to work with  file that comes from a different server or database. These tables/files do contain columns/fields that contain nulls. By specifying ALWNULL(*USRCTL) we can read these files without the program erroring as a field contains null, and handle the nulls using the null indicator.
+
+
+FLD1 =  NULL 
+ IF NOT %NULLIND(FLD1)
+    A= FLD1
+  ENDIF
+
+If we use ALWNULL(*INPUTONLY) if a field containing null is encountered in the input operation, READ, CHAIN, etc., it is transformed into the field's default, blank, zero, etc.
+
+------------------------------------------------------------------------------------------------------------------
+D-SPEC keywords
+------------
+
+INZ  KEYWORD INITIALISE VALUE TO VARIABLES WHILE DECLARATION.
+
+CONST KEYWORD PROVIDES VALUE TO CONSTANTS
+
+LIKE KEYWORD IS USED TO REFER DEFINITION OF SOME OTHER VARIABLE.
+DWEMPNO           S                   LIKE(EMPNO)
+
+
+
+
+---------------------------------------------------------------------------------------------------------
+-----
+Journalling in as400 .
+---------------------------
+
+
+
+CRTJRNRCV : Create journal receiver.
+
+CRTJRNRCV JRNRCV(JRNRCVREXM)
+   jrnrcvre00
+   jrnrcvre01
+   jrnrcvre02
+   jrnrcvre03
+   jrnrcvre04 
+
+
+crtjrn   : create journal
+
+CRTJRN JRN(JRNEXMP) JRNRCV(JRNRCVREXM) 
+
+
+strjrnpf : start journal pf
+STRJRNPF FILE(PRAFULLIB/EMPPF) JRN(JRNEXMP) IMAGES(*BOTH) OMTJRNE(*OPNCLO)
+
+
+dspjrn: display journal entries and store into outfile
+  DSPJRN JRN(JRNEXMP) FILE((EMPPF)) RCVRNG(*CURCHAIN) OUTPUT(*OUTFILE) OUTFILE(QTEMP/TEMP)                                                                  
+
+Entry types :-
+PT/PX   =  Insert entry (Add entry)
+UB = Before update
+UP : After update
+DL  : Delete record
+
+
+endjrnpf  : end journaling of physical file
+-----------------------------------------------------------------------------
+
+addpfcst : Add physical file constraints
+
+ADDPFCST FILE(EMPPF) TYPE(*REFCST) KEY(DEPTNO) PRNFILE(DEPTPF) PRNKEY(DEPTNO)                                                                             
+
+rmvpfcst : remove pf constraint
+
+
+-------------------------------------------------------------------
+
+Creating subfiles : 
+
+1.STRSDA
+
+2.
+subfiles : 
+
+
+1.Clearing of subfile.
+   
+   a.	switch on clear indicator
+   b. 	write control part
+   c.    switch of clear indicator
+
+
+2. Loading data from data base file into subfile
+
+      *loval  setll emppf
+              read  emppf
+
+rrn = 0
+dow not %eof() 
+       
+    sempno =  empno 
+    sempname =  empname
+    sempcity  =  empcity
+   rrn =  rrn + 1
+   write empsfl
+
+   read emppf
+enddo
+
+
+3. displaying subfile
+   write footer
+
+   switch on dsply control all the time
+
+if rrn > 0
+   switch on disply indicator
+endif
+   
+exfmt control part
+
+switch of disply and control indicators.
+
+
+---------------------------------------------------
+F10 : DATABASE REFERENCE
+If we need to refer field from data base tables in screen we can use this function key.
+
+
+------------------------------------------------------------------------------------------------
+
+
+SQL topics :-
+
+1. Creating tables
+
+Create table for creating data base tables
+  CREATE TABLE EMPTABLE                                 
+  (EMPNO INT  NOT NULL WITH DEFAULT ,                  
+   EMPNAME VARCHAR(50) NOT NULL WITH DEFAULT ,         
+   EMPDEPT INT  NOT NULL WITH DEFAULT  ,               
+   EMPCITY CHAR(10) NOT NULL WITH DEFAULT ,            
+   PRIMARY KEY (EMPNO)) ;                              
+
+2. Create views
+
+Create view view name as ( query)
+
+
+3. Create index
+create unique index indexname on  tablename(key1 ,key2) 
+
+
+4.drop statement
+
+This will remove table/index or view objects from system.
+
+equivalent to dltf command
+           or wrkobj objname and option 4
+
+5. ALTER TABLE COMMAND
+
+ALTER TABLE EMPTABLE ADD COLUMN NEWFLD CHAR (10 ) NOT NULL WITH   
+DEFAULT      
+
+
+ EQUIVALENT TO DDS :-
+  1. MAKE CHANGES IN SOURCE MEMBER AND SAVE THAT SOURCE MEMBER
+  2. Issue a change PF command CHGPF
+
+CHGPF FILE(EMPPF) SRCFILE(QDDSSRC) 
+------------------------------------------------
+
+Change pf can also be used to change physical file attributes , if we keep srcfile *NONE , it will allow to change attributes
+ 
+ CHGPF FILE(EMPPF) SIZE(*NOMAX)                                                      
+
+
+---------------------------------------------------------------------------------------
+
+Flat files  : Files without any structure
+
+CRTPF COMMAND WITH RECORD length will create a flat file
+CRTPF FILE(FLATFILE) RCDLEN(500)  
+
+----------------------------------------------------------------------------------------
+clrpfm  : Clear physical file member
+
+
+clrpfm emppf
+
+    is  equivalent to sql query
+
+ delete from emppf
+
+---------------------------------------------------------------------------------------------
+Queries in as400
+
+WRKQRY  : Work with queries
+Option 1   to create , option2 change
+
+
+RUNQRY QRY(EMPQRY) OUTTYPE(*PRINTER)     : run query and take output to printer
+ This will generate spool file and report will be printed from printer attached to outq
+
+
+RUNQRY QRY(EMPQRY) OUTTYPE(*OUTFILE) OUTFILE(PRAFULLIB/EMPQRYOP)    
+
+This will generate output file based on query output
+
+
+
+-------------------------------------------------------------
+
