@@ -1,0 +1,317 @@
+P UpdTot    B                        
+                                           
+D MDSUpdTot    PI                       
+D  ToggleP                       1         
+D  SetIndP                        N   Const
+                                           
+D FinalTot        S             12  0 Inz  
+                                           
+  // Set generic subfile number            
+  Clear CshPctInd;                         
+  If ToggleP='A';                          
+    SfNum1=Rn1;                             
+    If CopP<>'C' Or TypeP<>'D';            
+      CshPctInd=*On;                       
+    EndIf;                                 
+  Else;                                    
+    SfNum1=Rn2;                           
+    If CopP='C' Or TypeP<>'D';           
+      CshPctInd=*On;                     
+    EndIf;                               
+  EndIf;                                 
+                                         
+  // Check subfile exists                
+  If SfNum1>0;                            
+                                         
+    // Clear screen indicators & fields  
+    Clear TotalInd;                      
+    Clear NotAuthInd;                    
+    Clear LockedOutInd;                  
+                                         
+    // Read thru subfile                 
+    Clear SfNum1;                         
+    Clear @WhseTotals;                   
+    DoW  SfNum1<SfCnt;                    
+                                         
+      // Read next subfile record        
+      eadSf(ToggleP);                                     
+                                                           
+      // Find MDS occurence for budget Id                  
+      FindWhse(S1Whse:ArPtr);                              
+                                                           
+      // Set column position                               
+      ColPtrPos=ColPtrStr;                                 
+                                                           
+      MDSValues(ColPtrPos);                             
+      FinalTot+=CalRowTot(ToggleP);                        
+                                                           
+      // If requested - set indicators                     
+      If SetIndP=*On;                                      
+        SetDetailInd();                                    
+      EndIf;                                               
+                                                           
+      // Update subfile                                    
+      UpdSf(ToggleP);                                      
+                                                           
+    EndDo;                                                 
+                                     
+    // Update total                  
+    eadSf(ToggleP);                 
+    SetTotals(FinalTot);             
+    S1I50='Y';                       
+    UpdSf(ToggleP);                  
+                                     
+    // Set £ or % header field       
+    If toggleP='A';                  
+      C1VPT='£';                     
+      C1VP1='£';                     
+      C1VP2='£';                     
+      C1VP3='£';                     
+      C1VP4='£';                     
+      C1VP5='£';                     
+      C1VP6='£';                     
+      Write ctl1;                    
+    Else;                            
+      C1VPT='%';                     
+      C1VP1='%';                     
+      C1VP2='%';        
+      C1VP3='%';        
+      C1VP4='%';        
+      C1VP5='%';        
+      C1VP6='%';        
+      Write ctl2;        
+    EndIf;                      
+                        
+  EndIf;                
+                        
+P MDSUpdTot    E     
+
+P eadSf          B               
+                                  
+D eadSf          PI              
+D  ToggleP                       1
+                                  
+  SfNum1+=1;                       
+  If ToggleP='A';                 
+    Chain SfNum1 sfl1;              
+  Else;                           
+    Chain SfNum1 sfl2;              
+  EndIf;                          
+                                  
+P eadSf          E               
+
+P UpdSf           B                 
+                                    
+D UpdSf           PI                
+D  ToggleP                       1  
+                                    
+  ResetInd();                       
+  If ToggleP='A';                   
+    Update sfl1;                     
+  Else;                             
+    Update sfl2;                     
+  EndIf;                            
+                                    
+P UpdSf           E                 
+
+P MDSValues    B                   
+                                      
+D MDSValues    PI                  
+D  ColPtrPosP                    2  0 
+                                      
+D Loop            S              2  0 
+D PctVal          S             11  2 
+D Value           S             10  0 
+                                      
+  // Get percentage link              
+  Inf=1;                              
+  GetPctLink();                       
+                                      
+  // Load MDS with subfile fields     
+  For Loop=1 to 6;                    
+    // Set Column pointer/indicator position & error indicator
+    ColPtrPosP+=1;                                            
+                                                              
+    // Move subfile field to MDS                              
+    If Toggle = 'A';                                          
+      Value=@subfPer(Loop);                                   
+    Else;                                                     
+      PctVal=@subfPerP(Loop);                                 
+    EndIf;                                                    
+    MDSFld(Value:PctVal:ColPtrPosP);                       
+    Monitor;                                                  
+      If Toggle = 'A';                                        
+        @SubfPer(Loop)=Value;                                 
+        @WhseTotals(Loop)+=Value;                             
+      Else;                                                   
+        @SubfPerP(Loop)=PctVal;                               
+        @WhseTotals(Loop)+=@Periods(ColPtrPosP);              
+      EndIf;                                                  
+    On-Error;                                                 
+    EndMon;                                                   
+                    
+  EndFor;           
+                    
+P MDSValues    E 
+
+P CalRowTot       B                    
+                                       
+D CalRowTot       PI            12  0  
+D  ToggleP                       1     
+                                       
+D Loop            S              2  0  
+D RowPctTot       S             10  2  
+D RowTot          S             12  0  
+                                       
+  // Get percentage link values        
+  GetPctLink();                        
+                                       
+  // CLear row total                   
+  Clear RowTot;                        
+                                       
+  // Process every period              
+  For Loop=1 to 13;                                      
+                                                         
+    // Set field                                         
+    If @Cpf(Loop)='P';                                   
+      Eval(H) RowTot+=((@Periods(Loop)/100)*@PcLv(Loop));
+    Else;                                                
+      // Set field as value                              
+      Eval(H) RowTot+=@Periods(Loop);                    
+    EndIf;                                               
+                                                         
+  EndFor;                                                
+                                                         
+  If ToggleP='A';                                        
+    S1Buto=RowTot;                                       
+  Else;                                                  
+    If @PcLv(14)<>0;                                     
+      Eval(H) RowPctTot=((RowTot/@PcLv(14))*100);        
+    Else;                                                
+      RowPctTot=0;                                       
+    EndIf;                                               
+     S2Buto=RowPctTot;  
+   EndIf;               
+                        
+   Return RowTot;       
+                        
+ P CalRowTot       E    
+
+P SetDetailInd    B                                  
+                                                     
+D SetDetailInd    PI                                 
+                                                     
+D MsgN            S               N   Inz(*Off)      
+D UcNul           S              3                   
+                                                     
+  // Clear screen indicators                         
+  Clear NotAuthInd;                                  
+  Clear LockedOutInd;                                
+                                                     
+  // Check if user type allowed to change budget line
+  If IsFPUsrAut(BuTyP:S1Whse:IdP:UsTyP:LdUser)=*On;  
+    S1I52='Y';                                       
+    NotAuthInd=*On;                                  
+  EndIf;                                             
+                                                                      
+ // Budget line valid                                                 
+ If Not NotAuthInd;                                                   
+                                                                      
+   // Check if lock on budget line                                    
+   If ChkLck=*On;                                                     
+     If IsFPRcdLck(JobNam:LdUser:JobNumC:DaApDt:Timex:BuTyP:ObYear:IdP
+                   :UcNul:S1Whse:MsgN:Date1P:Time1P)=*On;             
+       S1I53='Y';                                                     
+       LockedOutInd=*On;                                              
+       InUseCnt+=1;                                                   
+       @InUse(InUseCnt)=S1Whse;                                       
+     EndIf;                                                           
+   Else;                                                              
+     If %LookUp(S1Whse:@InUse)>0;                                     
+       S1I53='Y';                                                     
+       LockedOutInd=*On;                                              
+     EndIf;                                                           
+   EndIf;                                                             
+  EndIf;            
+                    
+P SetDetailInd    E 
+                    
+
+P SetTotals       B                             
+                                                
+D SetTotals       PI                            
+D  FinalTotP                    12  0           
+                                                
+D Loop            S              2  0           
+D PctVal          S             11  2           
+                                                
+  If Toggle='A';                                
+    S1Buto=FinalTotP;                           
+    For Loop=1 to 6;                            
+      @SubfPer(Loop)=@WhseTotals(Loop);         
+    EndFor;                                     
+  Else;                                         
+    ColPtrPos=ColPtrStr;                        
+    S1Whse=0;                                   
+    GetPctLink();                                                       
+    For Loop=1 to ColMovCnt;                                            
+      ColPtrPos+=1;                                                     
+      If @PcLv(ColPtrPos)<>0;                                           
+        PctVal=%Dech(((@WhseTotals(Loop)/@PcLv(ColPtrPos))*100):6:2)   ;
+      EndIf;                                                            
+      @SubfPerP(Loop)=PctVal;                                           
+    EndFor;                                                             
+    If @PcLv(14)<>0;                                                    
+      PctVal=%Dech(((FinalTotP/@PcLv(14))*100):6:2);                    
+    EndIf;                                                              
+    S2Buto=PctVal;                                                      
+    ColPtrPos=ColPtrStr;                                                
+  EndIf;                                                                
+                                                                        
+P SetTotals       E                                                     
+
+
+P GetPctLink      B                      
+                                         
+D GetPctLink      PI                     
+                                         
+D PerN            S              2  0    
+                                         
+  // Return values to array @PcLv        
+                                         
+  // Link is for same file(ie warehouse) 
+  Clear @PcLv;                           
+  If S1Whse=WhseP;                       
+                                         
+    @PcLv=@PctLnk;                       
+                                         
+  Else;                                  
+    // Get external file link value                               
+    For PerN=1 to 13;                                             
+      @PcLv(PerN)=GetFPPcLk(ObYear:S1PcLk:S1PcBt:S1Whse:PerN:Inf);
+      @PcLv(14)=@PcLv(14)+@PcLv(PerN);                            
+    EndFor;                                                       
+                                                                  
+  EndIf;                                                          
+                                                                  
+P GetPctLink      E           
+
+P MDSFld       B                         
+                                            
+D MDSFld       PI                        
+D  ValueP                       10  0       
+D  PctValP                      11  2       
+D  ColPtrPosP                    2  0       
+                                            
+  // Only process upto 13 period fields     
+  If ColPtrPosP<=13;                        
+    // Set values                           
+    If toggle='A';                          
+      SetValue(ValueP:ColPtrPosP);          
+    Else;                                   
+      // Set percentage                     
+      SetPercentage(PctValP:ColPtrPosP);    
+    EndIf;                                  
+  EndIf;                                    
+                                            
+P MDSFld       E                                                             
